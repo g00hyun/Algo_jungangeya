@@ -48,12 +48,10 @@ string solution(vector<int> numbers) {
     
     sort(strs.begin(), strs.end(), cmp);
     
-    if (strs.at(0) == "0") return "0";
+    if (strs[0] == "0") return "0";
     
-    for(auto i : strs) {
-        // cout << i << ' ';
+    for(auto i : strs)
         answer += i;
-    }
     
     return answer;
 }
