@@ -1,8 +1,7 @@
+// gpt한테 코드 리팩토링 맡긴 코드
+
 #include <iostream>
 #include <vector>
-#include <string>
-#include <algorithm>
-#include <unordered_set>
 
 using namespace std;
 
@@ -15,161 +14,81 @@ bool inRange(int x, int y) {
     return 0 <= x && x < n && 0 <= y && y < n;
 }
 
-// 개행문자는 "\n" 사용하기 (endl사용할 시 버퍼와 줄바꿈을 동시에 처리하므로 매우 느림)
+// 경사로 설치 가능 여부를 확인하는 함수
+bool canInstallRamp(int *line, int pos, int len, int direction) {
+    for (int i = 0; i < l; ++i) {
+        int index = pos + i * direction;
+        if (index < 0 || index >= n || line[index] != len) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// 경사로 설치 상태를 업데이트하는 함수
+void installRamp(int *visited, int pos, int direction) {
+    for (int i = 0; i < l; ++i) {
+        visited[pos + i * direction] = 1;
+    }
+}
+
+// 가로 및 세로 방향 경로를 확인하는 함수
+bool checkPath(int *line) {
+    int visited[n] = {0};
+
+    for (int i = 0; i < n - 1; ++i) {
+        if (line[i] == line[i + 1]) {
+            continue;
+        }
+
+        if (line[i] + 1 == line[i + 1]) { // 오르막길
+            if (i - l + 1 < 0 || !canInstallRamp(line, i - l + 1, line[i], 1) || visited[i - l + 1] == 1) {
+                return false;
+            }
+            installRamp(visited, i - l + 1, 1);
+        } else if (line[i] - 1 == line[i + 1]) { // 내리막길
+            if (i + l >= n || !canInstallRamp(line, i + 1, line[i + 1], 1) || visited[i + 1] == 1) {
+                return false;
+            }
+            installRamp(visited, i + 1, 1);
+        } else {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int main() {
-    ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
     cin >> n >> l;
-    for(int i=0; i<n; i++)
-        for(int j=0; j<n; j++)
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
             cin >> MAP[i][j];
 
     int answer = 0;
 
-    vector<int> r;
-
-    // 가로
-    for(int row = 0; row<n; row++) {
-        int visited[n] = {0,};
-
-        int col = 0;
-        while(col < n) {
-            int ncol = col + 1;
-
-            if(inRange(row,ncol) && MAP[row][col] == MAP[row][ncol])
-                col++;
-            else if(MAP[row][col] == MAP[row][ncol] - 1) {
-                int len = l;
-                bool isInstall = true;
-                while(len--)
-                    if(visited[col - len] == 1)
-                        isInstall = false;
-                
-                if(!isInstall) break;
-
-                bool isStep = true;
-                len = l;
-                while(len--) {
-                    int rcol = col - len;
-                    if(!(inRange(row,rcol) && MAP[row][col] == MAP[row][rcol])) {
-                        isStep = false;
-                        break;
-                    }
-                }
-
-                if(isStep) {
-                    int len = l;
-                    while(len--)
-                        visited[col - len] = 1;
-                    col++;
-                }
-                else break;
-            }
-            else if(MAP[row][col] == MAP[row][ncol] + 1) {
-                int len = l;
-                bool isInstall = true;
-                while(len--)
-                    if(visited[col + len + 1] == 1)
-                        isInstall = false;
-                
-                if(!isInstall) break;
-                
-                bool isStep = true;
-                len = l;
-                while(len--) {
-                    int rcol = col + len + 1;
-                    if(!(inRange(row,rcol) && MAP[row][ncol] == MAP[row][rcol])) {
-                        isStep = false;
-                        break;
-                    }
-                }
-
-                if(isStep) {
-                    int len = l;
-                    while(len--)
-                        visited[col + len + 1] = 1;
-                    col++;
-                }
-                else break;
-            }
-            else
-                break;
+    // 가로 경로 확인
+    for (int row = 0; row < n; ++row) {
+        if (checkPath(MAP[row])) {
+            answer++;
         }
-
-        if(col == n-1) answer++, r.push_back(row);
     }
 
-    vector<int> c;
-    // 세로
-    for(int col = 0; col<n; col++) {
-        int visited[n] = {0,};
-
-        int row = 0;
-        while(row < n) {
-            int nrow = row + 1;
-
-            if(inRange(nrow,col) && MAP[row][col] == MAP[nrow][col])
-                row++;
-            else if(MAP[row][col] == MAP[nrow][col] - 1) {
-                int len = l;
-                bool isInstall = true;
-                while(len--)
-                    if(visited[row - len] == 1)
-                        isInstall = false;
-                
-                if(!isInstall) break;
-
-                bool isStep = true;
-                len = l;
-                while(len--) {
-                    int rrow = row - len;
-                    if(!(inRange(rrow,col) && MAP[row][col] == MAP[rrow][col])) {
-                        isStep = false;
-                        break;
-                    }
-                }
-
-                if(isStep) {
-                    int len = l;
-                    while(len--)
-                        visited[row - len] = 1;
-                    row++;
-                }
-                else break;
-            }
-            else if(MAP[row][col] == MAP[nrow][col] + 1) {
-                int len = l;
-                bool isInstall = true;
-                while(len--)
-                    if(visited[row + len + 1] == 1)
-                        isInstall = false;
-                
-                if(!isInstall) break;
-
-                bool isStep = true;
-                len = l;
-                while(len--) {
-                    int rrow = row + len + 1;
-                    if(!(inRange(rrow,col) && MAP[nrow][col] == MAP[rrow][col])) {
-                        isStep = false;
-                        break;
-                    }
-                }
-
-                if(isStep) {
-                    int len = l;
-                    while(len--)
-                        visited[row + len + 1] = 1;
-                    row++;
-                }
-                else break;
-            }
-            else
-                break;
+    // 세로 경로 확인
+    for (int col = 0; col < n; ++col) {
+        int columnPath[n];
+        for (int row = 0; row < n; ++row) {
+            columnPath[row] = MAP[row][col];
         }
-
-        if(row == n-1) answer++, c.push_back(col);
+        if (checkPath(columnPath)) {
+            answer++;
+        }
     }
 
-    cout << answer;
+    cout << answer << "\n";
+    return 0;
 }
