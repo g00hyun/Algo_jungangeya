@@ -58,11 +58,6 @@ int main() {
         }
         party.push_back(tmp);
 
-        // cout << "tmp..." << endl;
-        // for(int t : tmp)
-        //     cout << t << ' ';
-        // cout << endl;
-
         if(tmp.size() == 2)
             graph[tmp[0]].push_back(tmp[1]), graph[tmp[1]].push_back(tmp[0]);
         else if(tmp.size() > 2) {
@@ -75,14 +70,6 @@ int main() {
         }
     }
 
-    // for(int i = 1; i<=n; i++) {
-    //     cout << "party(" << i << ") =>";
-    //     for(int j : graph[i])
-    //         cout << j << ' ';
-    //     cout << endl;
-    // }
-
-    // truth 테이블 채우는 작업
     for(int i = 1; i<=n; i++)
         if(truth[i])  {
             q.push(i);
@@ -90,40 +77,6 @@ int main() {
         }
 
     BFS();
-
-    // for(int i = 1; i<=n; i++)
-    //     if(truth[i])
-    //         cout << i << ' ';
-    // cout << endl;
-
-
-    // for(auto it : party) {
-    //     bool isTruth = false;
-    //     for(int i : it)
-    //         if(truth[i]) isTruth = true;
-        
-    //     if(isTruth)
-    //         for(int i : it)
-    //             truth[i] = true;
-    // }
-
-    // for(int i = party.size()-1; i>=0; i--) {
-    //     bool isTruth = false;
-    //     for(int j : party[i])
-    //         if(truth[j]) isTruth = true;
-        
-    //     if(isTruth)
-    //         for(int j : party[i])
-    //             truth[j] = true;
-
-    // }
-
-    // for(auto it : party) {
-    //     for(int i : it)
-    //         cout << i << ' ';
-    //     cout << endl;
-    // }
-    // cout << party.size();
 
     int result = 0;
     for(auto it : party) {
