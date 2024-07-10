@@ -14,7 +14,7 @@ void Backtracking() {
     if(v.size() == m) {
         for(auto i : v)
             cout << i << ' ';
-        cout << '\n';
+        cout << '\n'; // 왜 \n으로 해줘야할까..?
 
         return;
     }
