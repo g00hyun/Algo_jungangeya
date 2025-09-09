@@ -38,7 +38,6 @@ public class Main {
 			FindSeat(i);
 			Sitting(i);
 		}
-		// printSeats();
 		System.out.println(CalculatePreferPoint());
 	}
 
@@ -71,9 +70,7 @@ public class Main {
 	private static void FindSeat(int s) {
 		Step0();
 		Step1(s);
-		// if(canSeat()) return;
 		Step2();
-		// if(canSeat()) return;
 		Step3();
 	}
 
@@ -172,18 +169,6 @@ public class Main {
 						canSeats[i][j] = -1;
 				}
 			}
-	}
-
-	private static boolean canSeat() {
-		int count = 0;
-		for (int i = 0; i<n; i++) {
-			for(int j = 0; j<n; j++) {
-				if(canSeats[i][j] != -1) count++;
-			}
-		}
-
-		if(count == 1) return true;
-		return false;
 	}
 
 	private static int CalculatePreferPoint() {
