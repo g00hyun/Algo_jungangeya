@@ -34,7 +34,7 @@ class Solution {
                     for(int d = 0; d<2; d++)
                         cluster[a][b][c][d].sort((i,j) -> i-j);
         
-        // O(100_000 * 24)
+        // O(100_000 * 24 * log(50_000))
         for(String q : query) {
             String[] line = q.split(" ");
             
