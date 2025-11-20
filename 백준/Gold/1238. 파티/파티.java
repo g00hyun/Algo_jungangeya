@@ -1,24 +1,22 @@
 import java.util.*;
+import java.io.*;
 
 class Main {
     static int n,m,t;
     static List<Pos>[] graph;
     
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
-        t = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int[] line = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        n = line[0]; m = line[1]; t = line[2];
         graph = new ArrayList[n+1];
         for(int i = 1; i<=n; i++)
             graph[i] = new ArrayList<>();
         
         for(int i = 0; i<m; i++) {
-            int from = sc.nextInt();
-            int to = sc.nextInt();
-            int weight = sc.nextInt();
+            line = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             
-            graph[from].add(new Pos(to, weight));
+            graph[line[0]].add(new Pos(line[1], line[2]));
         }
         
         int answer = -1;
