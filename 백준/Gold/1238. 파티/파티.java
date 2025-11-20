@@ -43,9 +43,6 @@ class Main {
             Pos cur = q.poll();
             int prefixDist = cur.weight;
             
-            // if(cur.to == end) {
-            //     return dist[cur.to];
-            // }
             if(prefixDist > dist[cur.to]) continue;
             
             for(int i = 0; i<graph[cur.to].size(); i++) {
